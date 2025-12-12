@@ -1,0 +1,118 @@
+Here is the **Updated Master Design Document**. I have integrated the specific logo instructions regarding the "WRS" lettering and the "White Potato Flower" into the design system and header specs.
+
+You can copy and paste this entire block directly to your CLI AI.
+
+***
+
+# PROJECT: White Rock Specialties Website (B2B Industrial)
+
+## 1. PROJECT OVERVIEW
+**Company:** White Rock Specialties, LLC (Mosca, CO)
+**Industry:** Organic Potato Packing & Shipping (B2B)
+**Goal:** Create a professional, utilitarian brochure website for wholesale buyers, truck drivers, and auditors.
+**Vibe:** "Industrial Clean." No fluff. High reliability.
+**Tech Stack Preference:** Simple HTML/CSS/JS or a lightweight static site generator.
+
+---
+
+## 2. DESIGN SYSTEM
+
+### Visual Identity (Logos)
+* **Primary Text Brand:** **"WRS"**
+    * *Style:* Heavy, stylized sans-serif (mimicking the hand-painted black lettering on the facility wall).
+    * *Color:* Utility Black (`#111111`).
+* **Graphic Icon:** **White Potato Flower on Sage Green**
+    * *Usage:* Use this as the "Favicon" and as a brand mark next to the "WRS" header.
+    * *Visual:* A simple white vector illustration of a potato flower centered on a Sage Green circle or square.
+
+### Color Palette (Strict)
+* **Backgrounds:** Clean White (`#FFFFFF`) - mimics sanitary block walls.
+* **Text & Headers:** Utility Black (`#111111`) - mimics the baseboards/signage.
+* **Accents/Buttons:** Mosca Sage (`#78866B`) - mimics the facility wall stripe. *Use this for all buttons and active links.*
+* **Alerts/Status:** Deep Red (`#A61A1A`) - only for "At Capacity" or "Do Not Park" indicators.
+
+### Typography
+* **Headers:** `Impact`, `Oswald`, or a heavy slab-serif. Bold, industrial, uppercase.
+* **Body:** `Arial`, `Roboto`, or `Helvetica`. High legibility, standard sans-serif.
+
+---
+
+## 3. ARCHITECTURE & PAGE SPECS
+
+### GLOBAL ELEMENTS
+* **Navbar:**
+    * **Left:** [Icon: White Potato Flower on Green] + Text: **WRS** (Black).
+    * **Right:** Links (Home, About, Products, Logistics, [Audit - hidden/subtle]), Contact Button.
+* **Footer:** Black background, White text. Address, Phone, Email, Copyright.
+
+### PAGE 1: HOME (Landing)
+* **Hero Section:** Full width. Image placeholder (Packing line).
+* **Headline:** "Certified Organic Potato Packing & Shipping"
+* **Subhead:** "San Luis Valley, CO | Serving Retail & Wholesale Nationwide"
+* **Status Indicator (Feature):** A component that checks an Airtable status (simulate this with a static div for now).
+    * *State A:* Green Dot - "Accepting Orders"
+    * *State B:* Red Dot - "At Capacity / Busy"
+* **CTA Button:** "Driver Logistics" (Links to Logistics Page).
+
+### PAGE 2: ABOUT US
+* **Concept:** "New Life in the Old School."
+* **Layout:** Text Left / Image Right.
+* **Content:** Focus on the history of Rockey Farms + White Mountain Farm and the retrofitting of the Sangre de Cristo High School.
+
+### PAGE 3: PRODUCTS (Specs)
+* **Layout:** Grid system.
+* **Section 1 - Varieties:** List (Russet, Red, Yellow, Fingerling).
+* **Section 2 - Packaging:** List (Bulk Bins, 50lb Cartons, Consumer Bags 3lb/5lb).
+* **Section 3 - Integration:** Placeholder for "Inventory Status" (Airtable Embed).
+
+### PAGE 4: LOGISTICS (Driver & Vendor Hub)
+* **Critical Function:** Traffic control and check-ins.
+* **Map Section:** Placeholder for a Google Map embed or Static Image of the facility layout.
+* **Text Rules:** "North Gate Entry Only," "Do Not Break Seal," "No Idling."
+* **Forms (The "Future" Integration):**
+    * Create two distinct visual containers for **Airtable Form Embeds**:
+        1.  "Driver Check-In"
+        2.  "Vendor/Visitor Log"
+    * *Note to AI:* Use simple `<iframe>` placeholders with a label "Airtable Form Here."
+
+### PAGE 5: AUDIT (Restricted)
+* **Logic:** A simple "Gatekeeper" page.
+* **UI:** A password input field.
+* **Function:** If password == "wrs2025" (placeholder), reveal the "Audit Dashboard" (Links to PDF certs). *This needs to be client-side simple for now.*
+
+---
+
+## 4. COPY & CONTENT (Copy/Paste this exactly)
+
+**[Header Info]**
+**WRS** (White Rock Specialties, LLC)
+
+**[About Us Text]**
+"Established in 2012, White Rock Specialties is a joint venture between two multi-generational family farms: Rockey Farms and White Mountain Farm. Located in the renovated Sangre de Cristo High School building in Mosca, Colorado, we operate a dedicated organic packing facility designed to meet the highest standards of food safety. We specialize in handling organic potatoes for our founding farms and select growers across the San Luis Valley."
+
+**[Capabilities List]**
+* Certified Organic Handling (CO Dept of Agriculture)
+* GAP (Good Agricultural Practices) Compliant
+* GHP (Good Handling Practices) Compliant
+* Modern Optical Sorting Technology
+
+**[Logistics Rules]**
+* **Address:** 5401 Terry St, Mosca, CO 81144
+* **Truck Entry:** Use North Gate.
+* **Check-In:** Drivers must check in digitally or at the shipping office door before backing into a dock.
+* **Dock Assignments:** Verify with Shipping Manager upon arrival.
+
+**[Footer Contact]**
+Phone: (719) 206-3184
+Email: info@whiterockspec.com
+Mailing: PO Box 116, Mosca, CO 81144
+
+---
+
+## 5. INSTRUCTIONS FOR THE AI
+1.  Scaffold the project with `index.html`, `style.css`, and a `script.js`.
+2.  **Logo Implementation:** Use a placeholder SVG for the "White Potato Flower" icon. Use a bold sans-serif font for the "WRS" text.
+3.  Use the color variables defined above (`--color-sage`, `--color-utility-black`).
+4.  Create the **Logistics** page with clear, boxed areas for the future Airtable iframes.
+5.  Create the **Audit** page with a basic JavaScript password toggle.
+6.  Ensure the site is fully responsive (mobile-friendly) for truck drivers using phones.
