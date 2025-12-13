@@ -84,7 +84,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Hero Section */
 .hero {
-    background: url('images/main.jpg') no-repeat center center/cover; /* Placeholder image */
+    background: url('images/Main.jpg') no-repeat center center/cover; /* Placeholder image */
     color: var(--color-white);
     text-align: center;
     padding: 100px 20px;
