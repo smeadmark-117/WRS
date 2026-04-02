@@ -1,0 +1,10 @@
+{
+  "name": "whiterockspec.com",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@vercel/blob": "^0.23.0",
+    "airtable": "^0.12.2",
+    "dotenv": "^16.4.5"
+  }
+}

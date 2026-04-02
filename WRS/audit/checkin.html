@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Driver Check-In | White Rock Specialties</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Impact&family=Oswald:wght@400;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Wizard Specific Styles */
+        .wizard-container {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .wizard-step {
+            display: none;
+        }
+
+        .wizard-step.active {
+            display: block;
+        }
+
+        .wizard-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .wizard-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .btn-large {
+            padding: 1rem 2rem;
+            font-size: 1.2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            text-transform: uppercase;
+            font-family: 'Oswald', sans-serif;
+            width: 100%;
+            margin: 10px 0;
+        }
+
+        .btn-next {
+            background-color: var(--color-mosca-sage);
+            color: white;
+        }
+
+        .btn-back {
+            background-color: #ddd;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ccc;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            box-sizing: border-box;
+        }
+
+        .form-group input:focus {
+            border-color: var(--color-mosca-sage);
+            outline: none;
+        }
+
+        .signature-pad-container {
+            border: 2px solid #ccc;
+            border-radius: 6px;
+            background: #f9f9f9;
+            width: 100%;
+            height: 200px;
+            position: relative;
+        }
+
+        .signature-pad {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .policy-box {
+            background: #f0f4f0;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 5px solid var(--color-mosca-sage);
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .language-toggle {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .lang-btn {
+            padding: 0.5rem 1rem;
+            border: 2px solid var(--color-mosca-sage);
+            background: transparent;
+            color: var(--color-mosca-sage);
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .lang-btn.active {
+            background: var(--color-mosca-sage);
+            color: white;
+        }
+
+        /* Success Message */
+        .success-container {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            color: var(--color-mosca-sage);
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 480px) {
+            .wizard-container {
+                margin: 1rem;
+                padding: 15px;
+            }
+            .btn-large {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="navbar-left">
+                <a href="index.html" class="brand">
+                    <img src="images/logo.png" alt="White Rock Specialties Logo" class="logo-image">
+                </a>
+            </div>
+            <div class="navbar-right">
+                <a href="index.html">Home</a>
+                <a href="about.html">About</a>
+                <a href="products.html">Products</a>
+                <a href="logistics.html">Logistics</a>
+                <a href="contact.html" class="button">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="page-content">
+        <div class="wizard-container" id="checkin-wizard">
+            
+            <!-- Step 1: Challenge Code -->
+            <div class="wizard-step active" id="step-challenge">
+                <div class="wizard-header">
+                    <h2 data-en="Security Check" data-es="Control de Seguridad">Security Check</h2>
+                    <p data-en="Please enter the challenge code provided on-site." data-es="Por favor, introduzca el código de seguridad proporcionado en el sitio.">Please enter the challenge code provided on-site.</p>
+                </div>
+                <div class="form-group">
+                    <label for="challenge-code" data-en="Challenge Code" data-es="Código de Seguridad">Challenge Code</label>
+                    <input type="text" id="challenge-code" placeholder="Enter code">
+                </div>
+                <button class="btn-large btn-next" onclick="validateChallenge()" data-en="Next" data-es="Siguiente">Next</button>
+            </div>
+
+            <!-- Step 2: Language & Repeat Driver -->
+            <div class="wizard-step" id="step-language">
+                <div class="wizard-header">
+                    <h2 data-en="Welcome" data-es="Bienvenido">Welcome</h2>
+                </div>
+                <div class="language-toggle">
+                    <button class="lang-btn active" onclick="setLanguage('en')">English</button>
+                    <button class="lang-btn" onclick="setLanguage('es')">Español</button>
+                </div>
+                <p class="text-center" data-en="Have you checked in here before?" data-es="¿Te has registrado aquí antes?">Have you checked in here before?</p>
+                <button class="btn-large btn-next" onclick="showRepeatLookup(true)" data-en="Yes, I am a Repeat Driver" data-es="Sí, soy un conductor habitual">Yes, I am a Repeat Driver</button>
+                <button class="btn-large btn-back" onclick="showNewDriverForm()" data-en="No, this is my first time" data-es="No, es mi primera vez">No, this is my first time</button>
+            </div>
+
+            <!-- Step 3: Repeat Driver Lookup -->
+            <div class="wizard-step" id="step-lookup">
+                <div class="wizard-header">
+                    <h2 data-en="Find My Info" data-es="Buscar Mi Información">Find My Info</h2>
+                </div>
+                <div class="form-group">
+                    <label for="lookup-phone" data-en="Cell Phone Number" data-es="Número de Teléfono Celular">Cell Phone Number</label>
+                    <input type="tel" id="lookup-phone" placeholder="719-000-0000">
+                </div>
+                <div class="wizard-buttons">
+                    <button class="btn-large btn-back" onclick="goToStep('language')" data-en="Back" data-es="Volver">Back</button>
+                    <button class="btn-large btn-next" onclick="lookupDriver()" data-en="Find Me" data-es="Buscar">Find Me</button>
+                </div>
+            </div>
+
+            <!-- Step 4: Driver Information Form -->
+            <div class="wizard-step" id="step-info">
+                <div class="wizard-header">
+                    <h2 data-en="Driver Details" data-es="Detalles del Conductor">Driver Details</h2>
+                </div>
+                <div class="form-group">
+                    <label for="driver-name" data-en="Full Name" data-es="Nombre Completo">Full Name</label>
+                    <input type="text" id="driver-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="truck-name" data-en="Name on Truck" data-es="Nombre en el Camión">Name on Truck</label>
+                    <input type="text" id="truck-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="driver-phone" data-en="Cell #" data-es="Celular #">Cell #</label>
+                    <input type="tel" id="driver-phone" required>
+                </div>
+                <div class="form-group">
+                    <label for="trailer-license" data-en="Trailer License" data-es="Licencia del Remolque">Trailer License</label>
+                    <input type="text" id="trailer-license" required>
+                </div>
+                <div class="form-group">
+                    <label for="trailer-state" data-en="State" data-es="Estado">State</label>
+                    <input type="text" id="trailer-state" required>
+                </div>
+                <div class="wizard-buttons">
+                    <button class="btn-large btn-back" onclick="goToStep('language')" data-en="Back" data-es="Volver">Back</button>
+                    <button class="btn-large btn-next" onclick="goToStep('pickup')" data-en="Next" data-es="Siguiente">Next</button>
+                </div>
+            </div>
+
+            <!-- Step 5: Pickup & Destination -->
+            <div class="wizard-step" id="step-pickup">
+                <div class="wizard-header">
+                    <h2 data-en="Load Details" data-es="Detalles de la Carga">Load Details</h2>
+                </div>
+                <div class="form-group">
+                    <label for="pickup-num" data-en="Pickup #" data-es="Recogida #">Pickup #</label>
+                    <input type="text" id="pickup-num" required>
+                </div>
+                <div class="form-group">
+                    <label for="destination" data-en="Destination" data-es="Destino">Destination</label>
+                    <input type="text" id="destination" required>
+                </div>
+                <div class="wizard-buttons">
+                    <button class="btn-large btn-back" onclick="goToStep('info')" data-en="Back" data-es="Volver">Back</button>
+                    <button class="btn-large btn-next" onclick="goToStep('policy')" data-en="Next" data-es="Siguiente">Next</button>
+                </div>
+            </div>
+
+            <!-- Step 6: Policy Approval -->
+            <div class="wizard-step" id="step-policy">
+                <div class="wizard-header">
+                    <h2 data-en="Load Requirements" data-es="Requisitos de Carga">Load Requirements</h2>
+                </div>
+                <div class="policy-box" id="policy-text">
+                    <!-- Policy text will be injected here -->
+                </div>
+                <div class="form-group">
+                    <label style="display: block; margin-bottom: 10px;">
+                        <input type="checkbox" id="policy-trash" style="width: auto; margin-right: 10px;">
+                        <span data-en="Remove trash/debris before entering dock" data-es="Elimine basura/escombros antes de entrar al muelle">Remove trash/debris before entering dock</span>
+                    </label>
+                    <label style="display: block; margin-bottom: 10px;">
+                        <input type="checkbox" id="policy-brakes" style="width: auto; margin-right: 10px;">
+                        <span data-en="Brakes must be set while in dock" data-es="Los frenos deben estar puestos en el muelle">Brakes must be set while in dock</span>
+                    </label>
+                    <label style="display: block; margin-bottom: 10px;">
+                        <input type="checkbox" id="policy-tandems" style="width: auto; margin-right: 10px;">
+                        <span data-en="Tandems must be to the back" data-es="Los ejes tándem deben estar atrás">Tandems must be to the back</span>
+                    </label>
+                    <label style="display: block; margin-bottom: 10px;">
+                        <input type="checkbox" id="policy-stay" style="width: auto; margin-right: 10px;">
+                        <span data-en="Stay in dock until safe to leave" data-es="Permanezca en el muelle hasta que sea seguro salir">Stay in dock until safe to leave</span>
+                    </label>
+                </div>
+                <div class="wizard-buttons">
+                    <button class="btn-large btn-back" onclick="goToStep('pickup')" data-en="Back" data-es="Volver">Back</button>
+                    <button class="btn-large btn-next" onclick="validatePolicy()" data-en="Next" data-es="Siguiente">Next</button>
+                </div>
+            </div>
+
+            <!-- Step 7: Signature -->
+            <div class="wizard-step" id="step-signature">
+                <div class="wizard-header">
+                    <h2 data-en="Signature" data-es="Firma">Signature</h2>
+                    <p data-en="Please sign below using your finger." data-es="Por favor, firme abajo usando su dedo.">Please sign below using your finger.</p>
+                </div>
+                <div class="signature-pad-container">
+                    <canvas id="signature-pad" class="signature-pad"></canvas>
+                </div>
+                <button class="btn-large btn-back" onclick="clearSignature()" style="margin-top: 10px;" data-en="Clear Signature" data-es="Borrar Firma">Clear Signature</button>
+                <div class="wizard-buttons">
+                    <button class="btn-large btn-back" onclick="goToStep('policy')" data-en="Back" data-es="Volver">Back</button>
+                    <button class="btn-large btn-next" onclick="submitCheckin()" data-en="Submit Check-In" data-es="Enviar Registro">Submit Check-In</button>
+                </div>
+            </div>
+
+            <!-- Step 8: Success -->
+            <div class="wizard-step" id="step-success">
+                <div class="success-container">
+                    <div class="success-icon">✓</div>
+                    <h2 data-en="Success!" data-es="¡Éxito!">Success!</h2>
+                    <p data-en="Your check-in has been submitted." data-es="Su registro ha sido enviado.">Your check-in has been submitted.</p>
+                    <p data-en="Please wait in your truck. You will be notified when your dock is ready." data-es="Por favor, espere en su camión. Se le notificará cuando su muelle esté listo.">Please wait in your truck. You will be notified when your dock is ready.</p>
+                    <a href="index.html" class="btn-large btn-next" style="display: inline-block; text-decoration: none;" data-en="Finish" data-es="Finalizar">Finish</a>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2026 White Rock Specialties, LLC</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+    <script src="checkin.js"></script>
+</body>
+</html>
