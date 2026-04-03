@@ -190,8 +190,8 @@
                 <button class="btn-large btn-next" onclick="validateChallenge()" data-en="Next" data-es="Siguiente">Next</button>
             </div>
 
-            <!-- Step 2: Language & Repeat Driver -->
-            <div class="wizard-step" id="step-language">
+            <!-- Step 2: Language & Phone Entry -->
+            <div class="wizard-step" id="step-start">
                 <div class="wizard-header">
                     <h2 data-en="Welcome" data-es="Bienvenido">Welcome</h2>
                 </div>
@@ -199,30 +199,18 @@
                     <button class="lang-btn active" onclick="setLanguage('en')">English</button>
                     <button class="lang-btn" onclick="setLanguage('es')">Español</button>
                 </div>
-                <p class="text-center" data-en="Have you checked in here before?" data-es="¿Te has registrado aquí antes?">Have you checked in here before?</p>
-                <button class="btn-large btn-next" onclick="showRepeatLookup(true)" data-en="Yes, I am a Repeat Driver" data-es="Sí, soy un conductor habitual">Yes, I am a Repeat Driver</button>
-                <button class="btn-large btn-back" onclick="showNewDriverForm()" data-en="No, this is my first time" data-es="No, es mi primera vez">No, this is my first time</button>
-            </div>
-
-            <!-- Step 3: Repeat Driver Lookup -->
-            <div class="wizard-step" id="step-lookup">
-                <div class="wizard-header">
-                    <h2 data-en="Find My Info" data-es="Buscar Mi Información">Find My Info</h2>
-                </div>
                 <div class="form-group">
-                    <label for="lookup-phone" data-en="Cell Phone Number" data-es="Número de Teléfono Celular">Cell Phone Number</label>
-                    <input type="tel" id="lookup-phone" placeholder="719-000-0000">
+                    <label for="start-phone" data-en="Cell Phone Number" data-es="Número de Teléfono Celular">Cell Phone Number</label>
+                    <input type="tel" id="start-phone" placeholder="719-000-0000">
                 </div>
-                <div class="wizard-buttons">
-                    <button class="btn-large btn-back" onclick="goToStep('language')" data-en="Back" data-es="Volver">Back</button>
-                    <button class="btn-large btn-next" onclick="lookupDriver()" data-en="Find Me" data-es="Buscar">Find Me</button>
-                </div>
+                <button class="btn-large btn-next" onclick="unifiedLookup()" data-en="Next" data-es="Siguiente">Next</button>
             </div>
 
-            <!-- Step 4: Driver Information Form -->
+            <!-- Step 3: Driver Information Form -->
             <div class="wizard-step" id="step-info">
                 <div class="wizard-header">
                     <h2 data-en="Driver Details" data-es="Detalles del Conductor">Driver Details</h2>
+                    <p id="prefill-msg" style="color: var(--color-mosca-sage); font-weight: bold; display: none;" data-en="Welcome back! We've pre-filled your info." data-es="¡Bienvenido de nuevo! Hemos completado tu información.">Welcome back! We've pre-filled your info.</p>
                 </div>
                 <div class="form-group">
                     <label for="driver-name" data-en="Full Name" data-es="Nombre Completo">Full Name</label>
@@ -234,7 +222,7 @@
                 </div>
                 <div class="form-group">
                     <label for="driver-phone" data-en="Cell #" data-es="Celular #">Cell #</label>
-                    <input type="tel" id="driver-phone" required>
+                    <input type="tel" id="driver-phone" readonly>
                 </div>
                 <div class="form-group">
                     <label for="trailer-license" data-en="Trailer License" data-es="Licencia del Remolque">Trailer License</label>
@@ -245,12 +233,12 @@
                     <input type="text" id="trailer-state" required>
                 </div>
                 <div class="wizard-buttons">
-                    <button class="btn-large btn-back" onclick="goToStep('language')" data-en="Back" data-es="Volver">Back</button>
+                    <button class="btn-large btn-back" onclick="goToStep('start')" data-en="Back" data-es="Volver">Back</button>
                     <button class="btn-large btn-next" onclick="goToStep('pickup')" data-en="Next" data-es="Siguiente">Next</button>
                 </div>
             </div>
 
-            <!-- Step 5: Pickup & Destination -->
+            <!-- Step 4: Pickup & Destination -->
             <div class="wizard-step" id="step-pickup">
                 <div class="wizard-header">
                     <h2 data-en="Load Details" data-es="Detalles de la Carga">Load Details</h2>
@@ -269,7 +257,7 @@
                 </div>
             </div>
 
-            <!-- Step 6: Policy Approval -->
+            <!-- Step 5: Policy Approval -->
             <div class="wizard-step" id="step-policy">
                 <div class="wizard-header">
                     <h2 data-en="Load Requirements" data-es="Requisitos de Carga">Load Requirements</h2>
@@ -301,7 +289,7 @@
                 </div>
             </div>
 
-            <!-- Step 7: Signature -->
+            <!-- Step 6: Signature -->
             <div class="wizard-step" id="step-signature">
                 <div class="wizard-header">
                     <h2 data-en="Signature" data-es="Firma">Signature</h2>
@@ -317,7 +305,7 @@
                 </div>
             </div>
 
-            <!-- Step 8: Success -->
+            <!-- Step 7: Success -->
             <div class="wizard-step" id="step-success">
                 <div class="success-container">
                     <div class="success-icon">✓</div>

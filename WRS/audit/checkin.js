@@ -35,24 +35,26 @@ function initSignaturePad() {
         signaturePad = new SignaturePad(canvas, {
             backgroundColor: 'rgb(255, 255, 255)'
         });
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
     }
 }
 
 function resizeCanvas() {
     const canvas = document.getElementById('signature-pad');
-    if (canvas) {
-        const ratio = Math.max(window.devicePixelRatio || 1, 1);
-        canvas.width = canvas.offsetWidth * ratio;
-        canvas.height = canvas.offsetHeight * ratio;
-        canvas.getContext("2d").scale(ratio, ratio);
-        signaturePad.clear();
+    if (canvas && signaturePad) {
+        if (document.getElementById('step-signature').classList.contains('active')) {
+            const ratio = Math.max(window.devicePixelRatio || 1, 1);
+            canvas.width = canvas.offsetWidth * ratio;
+            canvas.height = canvas.offsetHeight * ratio;
+            canvas.getContext("2d").scale(ratio, ratio);
+            signaturePad.clear();
+        }
     }
 }
 
 function clearSignature() {
-    signaturePad.clear();
+    if (signaturePad) {
+        signaturePad.clear();
+    }
 }
 
 function setLanguage(lang) {
@@ -79,6 +81,12 @@ function goToStep(stepId) {
     if (target) {
         target.classList.add('active');
         currentStep = stepId;
+        
+        if (stepId === 'signature') {
+            requestAnimationFrame(() => {
+                resizeCanvas();
+            });
+        }
     }
     document.getElementById('checkin-wizard').scrollIntoView({ behavior: 'smooth' });
 }
@@ -86,66 +94,63 @@ function goToStep(stepId) {
 function validateChallenge() {
     const code = document.getElementById('challenge-code').value.trim().toLowerCase();
     if (code === CHALLENGE_CODE) {
-        goToStep('language');
+        goToStep('start');
     } else {
         alert(currentLanguage === 'en' ? 'Incorrect challenge code.' : 'Código de seguridad incorrecto.');
     }
 }
 
-function showRepeatLookup(repeat) {
-    isRepeatDriver = repeat;
-    if (repeat) {
-        goToStep('lookup');
-    } else {
-        showNewDriverForm();
-    }
-}
-
-function showNewDriverForm() {
-    isRepeatDriver = false;
-    document.getElementById('driver-name').value = '';
-    document.getElementById('truck-name').value = '';
-    document.getElementById('driver-phone').value = '';
-    document.getElementById('trailer-license').value = '';
-    document.getElementById('trailer-state').value = '';
-    document.getElementById('destination').value = '';
-    goToStep('info');
-}
-
-async function lookupDriver() {
-    const phone = document.getElementById('lookup-phone').value.trim();
+async function unifiedLookup() {
+    const phone = document.getElementById('start-phone').value.trim();
     if (!phone) {
         alert(currentLanguage === 'en' ? 'Please enter your phone number.' : 'Por favor ingrese su número de teléfono.');
         return;
     }
+
+    // Always pre-fill the phone field in the next step
+    document.getElementById('driver-phone').value = phone;
 
     try {
         const response = await fetch(`/api/lookup-driver?phone=${encodeURIComponent(phone)}`);
         const data = await response.json();
 
         if (data.found) {
+            isRepeatDriver = true;
             driverData = data.driver;
+            // Prefill info
             document.getElementById('driver-name').value = driverData.Name || '';
             document.getElementById('truck-name').value = driverData['Name on Truck'] || '';
-            document.getElementById('driver-phone').value = driverData['Cell #'] || phone;
             document.getElementById('trailer-license').value = driverData['Trailer License'] || '';
             document.getElementById('trailer-state').value = driverData['State'] || '';
             
-            // Auto-fill destination only if crew has put one in the master record
             if (driverData['Destination']) {
                 document.getElementById('destination').value = driverData['Destination'];
             } else {
                 document.getElementById('destination').value = '';
             }
-
-            goToStep('info');
+            
+            // Show welcome back message
+            document.getElementById('prefill-msg').style.display = 'block';
         } else {
-            alert(currentLanguage === 'en' ? 'Driver not found. Please register as a new driver.' : 'Conductor no encontrado. Por favor regístrese como nuevo conductor.');
-            showNewDriverForm();
+            // New driver
+            isRepeatDriver = false;
+            driverData = {};
+            document.getElementById('driver-name').value = '';
+            document.getElementById('truck-name').value = '';
+            document.getElementById('trailer-license').value = '';
+            document.getElementById('trailer-state').value = '';
+            document.getElementById('destination').value = '';
+            document.getElementById('prefill-msg').style.display = 'none';
         }
+        
+        goToStep('info');
+
     } catch (error) {
         console.error('Lookup error:', error);
-        alert('Error looking up driver. Please try again or continue as a new driver.');
+        // On error, let them continue as new driver so we don't block them
+        isRepeatDriver = false;
+        document.getElementById('prefill-msg').style.display = 'none';
+        goToStep('info');
     }
 }
 
@@ -156,7 +161,6 @@ function validatePolicy() {
     const stay = document.getElementById('policy-stay').checked;
 
     if (trash && brakes && tandems && stay) {
-        // Check if signature is needed
         let needsSignature = true;
         if (isRepeatDriver && driverData['Signature File'] && driverData['Signature Captured Date']) {
             const sigDate = new Date(driverData['Signature Captured Date']);
